@@ -16,4 +16,4 @@ spring:
         base-url: http://localhost:11434
         chat:
           options:
-            model: qwen2.5-coder:3b
+            model: llama3.2:3b

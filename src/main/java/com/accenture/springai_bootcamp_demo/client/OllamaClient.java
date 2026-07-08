@@ -3,6 +3,7 @@ package com.accenture.springai_bootcamp_demo.client;
 import com.accenture.springai_bootcamp_demo.entity.ChatMessage;
 import java.util.List;
 
+import com.accenture.springai_bootcamp_demo.transit.TransitTools;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -16,7 +17,11 @@ import org.springframework.util.StringUtils;
  * Thin client over the Ollama API, backed by Spring AI's
  * {@link ChatClient}. Keeps the public surface intentionally small: callers
  * hand over the conversation history and receive the assistant's reply text.
+* Tool-calling: all beans passed in the constructor (typically POJOs with
+* {@code @Tool}-annotated methods) are registered as default tools, so the
+* model can invoke them on every request.
  */
+
 @Slf4j
 @Component
 public class OllamaClient {
@@ -24,8 +29,8 @@ public class OllamaClient {
     private final ChatClient chatClient;
 
     // Inject the ChatClient.Builder auto-configured by Spring Boot
-    public OllamaClient(ChatClient.Builder chatClientBuilder) {
-        this.chatClient = chatClientBuilder.build();
+    public OllamaClient(ChatClient.Builder chatClientBuilder, TransitTools tools) {
+        this.chatClient = chatClientBuilder.defaultTools(tools).build();
     }
 
     public String complete(List<ChatMessage> history) {
@@ -46,9 +51,7 @@ public class OllamaClient {
 
         } catch (RuntimeException ex) {
             log.error("Ollama request failed", ex);
-            // Replaced OpenRouterException with a generic RuntimeException for now.
-            // You can replace this with a custom OllamaException if you have one.
-            throw new RuntimeException("Failed to reach Ollama: " + ex.getMessage(), ex);
+            throw new OllamaException("Failed to reach Ollama: " + ex.getMessage(), ex);
         }
     }
 
@@ -76,7 +79,7 @@ public class OllamaClient {
 
     private String extractContent(String content) {
         if (!StringUtils.hasText(content)) {
-            throw new RuntimeException("Ollama returned an empty response");
+            throw new OllamaException("Ollama returned an empty response");
         }
         return content.trim();
     }
