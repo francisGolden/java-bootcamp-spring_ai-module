@@ -1,4 +1,4 @@
-package com.accenture.springai_bootcamp_demo.transit;
+package com.accenture.springai_bootcamp_demo.transit.service;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

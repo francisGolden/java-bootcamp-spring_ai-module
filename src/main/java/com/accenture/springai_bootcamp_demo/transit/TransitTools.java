@@ -1,10 +1,10 @@
 package com.accenture.springai_bootcamp_demo.transit;
 import java.util.List;
 
-import com.accenture.springai_bootcamp_demo.client.RigasSatiksmeClient;
+import com.accenture.springai_bootcamp_demo.transit.client.RigasSatiksmeClient;
 import com.accenture.springai_bootcamp_demo.transit.dto.Route;
 import com.accenture.springai_bootcamp_demo.transit.dto.RouteDto;
-import com.accenture.springai_bootcamp_demo.transit.dto.Stop;
+import com.accenture.springai_bootcamp_demo.transit.service.GtfsDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;
