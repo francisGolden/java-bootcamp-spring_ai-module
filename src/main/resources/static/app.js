@@ -67,7 +67,6 @@ function renderChatItem(chat) {
 }
 
 const QUICK_SUGGESTIONS = [
-    'What lines exist in Riga?',
     'How do I get from Āgenskalna tirgus to Ormaņu iela?',
     'How do I get from Centrāltirgus to Kuldīgas iela?'
 ];

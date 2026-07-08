@@ -1,4 +1,4 @@
-package com.accenture.springai_bootcamp_demo.client;
+package com.accenture.springai_bootcamp_demo.transit.client;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
