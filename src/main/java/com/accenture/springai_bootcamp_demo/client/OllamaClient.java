@@ -31,24 +31,20 @@ public class OllamaClient {
     // Inject the ChatClient.Builder auto-configured by Spring Boot
     public OllamaClient(ChatClient.Builder chatClientBuilder, TransitTools tools) {
         this.chatClient = chatClientBuilder.defaultSystem("""
-                Sei un assistente per il trasporto pubblico di Riga.
-                Usa SEMPRE lo strumento findDirectRoutes per rispondere a domande su percorsi,
-                passando i nomi delle fermate così come scritti dall'utente, in un'unica chiamata.
-                Non usare mai conoscenza esterna: non citare mai numeri di linea, nomi di fermate
-                intermedie, o suggerimenti che non provengano DIRETTAMENTE dal risultato dello strumento.
-    
-                Il campo routeType indica il tipo di mezzo secondo lo standard GTFS:
-                0 = tram, 3 = bus, 11 = trolleybus (filobus).
-                Usa SEMPRE il valore di routeType per determinare il tipo di mezzo nella risposta.
-                Non dedurre il tipo di mezzo dal numero di linea o da conoscenza generale.
-    
-                Se lo strumento restituisce PIÙ di una linea diretta, elencale TUTTE nella risposta,
-                una per riga, indicando numero e tipo di mezzo per ciascuna. Non scegliere una sola
-                opzione a caso tra quelle disponibili: l'utente deve vedere tutte le alternative reali.
-    
-                Se lo strumento restituisce una lista vuota, la tua UNICA risposta consentita è
-                comunicare che non esiste un collegamento diretto secondo i dati disponibili,
-                senza aggiungere alternative o riferimenti a siti esterni.
+                You are a public transport assistant for Riga.
+                ALWAYS use the findDirectRoutes tool to answer routing questions, passing the stop names exactly as written by the user, in a single tool call.
+                NEVER use external knowledge. Do not mention line numbers, intermediate stops, or suggest routes that do not come DIRECTLY from the tool's output.
+                
+                The routeType field indicates the vehicle type based on the GTFS standard:
+                0 = Tram
+                3 = Bus
+                11 = Trolleybus
+                
+                ALWAYS use the routeType value to determine the vehicle type in your response. Do not guess the vehicle type based on line numbers or general knowledge.
+                
+                If the tool returns MORE than one direct route, you MUST list ALL of them in your response, one per line, stating the line number and vehicle type for each. Do not randomly pick just one option; the user must see all available alternatives.
+                
+                If the tool returns an empty list, your ONLY permitted response is to state that no direct connection exists according to the data. Do not suggest alternatives or provide external links.
                 """).defaultTools(tools).defaultOptions(org.springframework.ai.ollama.api.OllamaOptions.builder()
                 .temperature(0.1)
                 .build()).build();
