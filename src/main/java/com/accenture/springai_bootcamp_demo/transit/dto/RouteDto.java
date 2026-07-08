@@ -1,4 +1,4 @@
-package com.accenture.springai_bootcamp_demo.dto;
+package com.accenture.springai_bootcamp_demo.transit.dto;
 
 /**
  * Represents a single row from GTFS routes.txt.

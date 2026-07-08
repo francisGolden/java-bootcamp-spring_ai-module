@@ -29,6 +29,7 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final OllamaClient ollamaClient;
     private final ChatMapper chatMapper;
+    private static final int MAX_HISTORY_MESSAGES = 6;
 
     @Transactional
     public ChatDto createChat(CreateChatRequest request) {
@@ -66,11 +67,21 @@ public class ChatService {
         Chat chat = loadChat(chatId);
 
         recordUserMessage(chat, request.content());
-        String reply = ollamaClient.complete(chat.getChatMessages());
+
+        List<ChatMessage> trimmedHistory = trimHistory(chat.getChatMessages());
+        String reply = ollamaClient.complete(trimmedHistory);
+
         recordAssistantMessage(chat, reply);
 
         chatRepository.save(chat);
         return chatMapper.toDto(chat);
+    }
+
+    private List<ChatMessage> trimHistory(List<ChatMessage> fullHistory) {
+        if (fullHistory.size() <= MAX_HISTORY_MESSAGES) {
+            return fullHistory;
+        }
+        return fullHistory.subList(fullHistory.size() - MAX_HISTORY_MESSAGES, fullHistory.size());
     }
 
     private void recordUserMessage(Chat chat, String content) {

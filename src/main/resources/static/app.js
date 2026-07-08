@@ -66,11 +66,17 @@ function renderChatItem(chat) {
     return item;
 }
 
+const QUICK_SUGGESTIONS = [
+    'What lines exist in Riga?',
+    'How do I get from Āgenskalna tirgus to Ormaņu iela?',
+    'How do I get from Centrāltirgus to Kuldīgas iela?'
+];
+
 function renderMessages(chat) {
     els.title.textContent = chat.title;
     els.messages.innerHTML = '';
     if (!chat.chatMessages.length) {
-        els.messages.innerHTML = '<div class="empty">Say hello to start the conversation.</div>';
+        els.messages.appendChild(renderEmptyState());
         return;
     }
     chat.chatMessages.forEach(m => els.messages.appendChild(renderMessage(m)));
@@ -82,10 +88,36 @@ function renderMessage(message) {
     wrapper.className = `msg ${message.role.toLowerCase()}`;
     const role = document.createElement('div');
     role.className = 'role';
-    role.textContent = message.role;
+    const icon = message.role === 'USER' ? '🧑' : '🚋';
+    role.textContent = `${icon} ${message.role}`;
     const body = document.createElement('div');
     body.textContent = message.content;
     wrapper.append(role, body);
+    return wrapper;
+}
+
+function renderEmptyState() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'empty';
+
+    wrapper.innerHTML = `
+        <div class="empty-icon">🚋</div>
+        <div class="empty-title">Ask me how to get around Riga</div>
+        <div>I can look up direct bus, tram, and trolleybus routes using live transit data.</div>
+    `;
+
+    const chips = document.createElement('div');
+    chips.className = 'suggestions';
+    QUICK_SUGGESTIONS.forEach(text => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'suggestion-chip';
+        chip.textContent = text;
+        chip.onclick = () => submitMessage(text);
+        chips.appendChild(chip);
+    });
+    wrapper.appendChild(chips);
+
     return wrapper;
 }
 

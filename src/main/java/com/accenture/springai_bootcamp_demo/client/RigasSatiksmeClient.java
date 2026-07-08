@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.http.converter.StringHttpMessageConverter;
-import com.accenture.springai_bootcamp_demo.dto.RouteDto;
+import com.accenture.springai_bootcamp_demo.transit.dto.RouteDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
