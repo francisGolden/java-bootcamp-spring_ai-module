@@ -11,5 +11,9 @@ spring:
       hibernate:
         dialect: org.hibernate.community.dialect.SQLiteDialect
     open-in-view: false
-
-#TODO: Add OpenRouter config
+  ai:
+      ollama:
+        base-url: http://localhost:11434
+        chat:
+          options:
+            model: llama3.2:3b
