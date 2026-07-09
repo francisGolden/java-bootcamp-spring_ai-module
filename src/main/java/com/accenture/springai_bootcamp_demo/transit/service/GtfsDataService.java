@@ -319,9 +319,11 @@ public class GtfsDataService {
         String[] candidateWords = candidateNormalized.split("\\s+");
 
         for (String queryWord : queryWords) {
+            String truncatedQuery = truncate(queryWord, 8);
+            int threshold = Math.max(1, truncatedQuery.length() / 3); // tollera più errori su parole più lunghe
+
             boolean found = Arrays.stream(candidateWords)
-                    .anyMatch(cw -> levenshteinDistance(
-                            truncate(queryWord, 6), truncate(cw, 6)) <= 1);
+                    .anyMatch(cw -> levenshteinDistance(truncatedQuery, truncate(cw, 8)) <= threshold);
             if (!found) {
                 return false;
             }
@@ -417,7 +419,11 @@ public class GtfsDataService {
             Map.entry('ø', 'o'), Map.entry('Ø', 'O'),
             Map.entry('å', 'a'), Map.entry('Å', 'A'),
             Map.entry('æ', 'a'), Map.entry('Æ', 'A'),
-            Map.entry('ß', 's')
+            Map.entry('ß', 's'),
+            Map.entry('ħ', 'h'), Map.entry('Ħ', 'H'),
+            Map.entry('þ', "th".charAt(0)), Map.entry('ð', 'd'),
+            Map.entry('œ', 'o'), Map.entry('ŧ', 't'),
+            Map.entry('ı', 'i'), Map.entry('ĸ', 'k')
     );
 
     /**
